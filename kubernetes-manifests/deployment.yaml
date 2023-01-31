@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otushomework1-deployment
+  labels:
+    app: otushomework1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otushomework1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: otushomework1
+    spec:
+      containers:
+      - image: evgenijbaba/otushomework1:latest
+        name: otushomework1
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /health/
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            path: /health/
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 5
